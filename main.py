@@ -1,22 +1,3 @@
-EXTRA_POINTS = 15
-
-# list
-# WEIGHT = 0
-# POINTS = 1
-# r = [3, 25]
-# p = [2, 15]
-# a = [2, 15]
-# m = [2, 20]
-# i = [1, 5]
-# k = [1, 15]
-# x = [3, 20]
-# t = [1, 25]
-# f = [1, 15]
-# d = [1, 10]
-# s = [2, 20]
-# c = [2, 20]
-
-# dict
 ITEMS = {
     'r': {'w': 3, 'points': 25},  # 1
     'p': {'w': 2, 'points': 15},  # 2
@@ -31,6 +12,12 @@ ITEMS = {
     's': {'w': 2, 'points': 20},  # 11
     'c': {'w': 2, 'points': 20}   # 12
 }
+
+EXTRA_POINTS = 15
+LACK_OF_ALL_ITEMS = 0
+
+for x in ITEMS.values():
+    LACK_OF_ALL_ITEMS -= x['points']
 
 
 def itd(i):  # index to dict-index
@@ -69,7 +56,7 @@ def compare(table, line, slot):
         ans = max(
             table[line - 1][slot],
             table[line - 1][slot - ITEMS[itd(line)]['w']] +
-            ITEMS[itd(line)]['points']
+            2 * ITEMS[itd(line)]['points']
         )
     return ans
 
@@ -178,9 +165,11 @@ def collected_to_gui(collected):
     gui_second_lane = gui_second_lane[:len(gui_second_lane) - 1]
     print(gui_second_lane)
 
+
 def zomdbe_apocalypsis_ver7():
     inventory = 8  # 2x4 inventory
-    table = [[0 for c in range(inventory + 1)] for _ in range(len(ITEMS) + 1)]
+    table = [[LACK_OF_ALL_ITEMS for c in range(
+        inventory + 1)] for _ in range(len(ITEMS) + 1)]
     # build
     for line in range(1, len(ITEMS) + 1):
         for slot in range(1, inventory + 1):
@@ -190,6 +179,7 @@ def zomdbe_apocalypsis_ver7():
     # backup
     list_of_items = compare_back(table, len(ITEMS), inventory)
     # print(list_of_items)
+
     collected = [itd(x) for x in list_of_items]
     # print(collected)
     collected_to_gui(collected)
